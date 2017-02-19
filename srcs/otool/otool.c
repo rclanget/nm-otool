@@ -1,11 +1,11 @@
+#include "otool.h"
+
 #include <sys/mman.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdlib.h>
-
-#include <stdio.h>
 
 #define MMAP_FLAG PROT_READ, MAP_PRIVATE
 
@@ -46,7 +46,7 @@ int	ft_otool(char *file)
 		return (ft_error("mmap"));
 
 	// Traitement -----
-	printf("%s\n", (char *)maped_file);
+	// printf("%s\n", (char *)maped_file);
 	// ----------------
 
 	if (munmap(maped_file, info_file.st_size) == -1)
@@ -65,20 +65,18 @@ int	otool(char **files)
 	return (EXIT_SUCCESS);
 }
 
-void ft_option(char *arg)
-{
-
-}
-
 int	main(int ac, char **av)
 {
 	int		ret;
+	int		options;
 
 	ret = EXIT_FAILURE;
-	ft_option(av);
+	options = 0;
+	if (!(av = ft_option(av, &options)))
+		return (1);
 	if (ac == 1)
 		ret = ft_otool("a.out");
 	else
-		ret = otool(++av);
+		ret = otool(av);
 	return (ret);
 }

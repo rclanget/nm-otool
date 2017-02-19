@@ -4,7 +4,8 @@ CC			=	gcc
 CFLAGS		=	-Werror -Wall -Wextra
 
 SRC_PATH	=	./srcs/otool/
-SRC_NAME	=	otool.c
+SRC_NAME	=	otool.c \
+				ft_option.c
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
 
 OBJ_PATH	=	./obj/
