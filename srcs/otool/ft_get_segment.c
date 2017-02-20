@@ -3,33 +3,32 @@
 #include <stdio.h>
 #include <string.h>
 
-static int		ft_get_segment_64(t_struct *s, struct load_command *lc)
+int				ft_add_segment(t_struct *s, void *segment, char *segname)
 {
-	if (lc->cmd == LC_SEGMENT_64)
-	{
-		if (!strcmp(SEGMENT_64(lc)->segname, "__TEXT") && (s->options & OPT_T))
-			printf("-> %s, %lu\n", SEGMENT_64(lc)->segname, SEGMENT_64(lc)->vmaddr);
-		else if (!strcmp(SEGMENT_64(lc)->segname, "__DATA") && (s->options & OPT_D))
-			printf("-> %s, %lu\n", SEGMENT_64(lc)->segname, SEGMENT_64(lc)->vmaddr);
-	}
-	return (0);
-}
+	t_segment *new;
+	t_segment *list;
 
-static int		ft_get_segment_32(t_struct *s, struct load_command *lc)
-{
-	(void)s;
-	if (lc->cmd == LC_SEGMENT)
+	new = (t_segment *)malloc(sizeof(t_segment));
+	list = s->segments;
+	new->segment = segment;
+	new->segname = segname;
+	new->next = NULL;
+	if (list)
 	{
-		printf("-> %s, %u\n", SEGMENT_32(lc)->segname, SEGMENT_32(lc)->vmaddr);
+		while (list->next)
+			list = list->next;
+		list->next = new;			
 	}
-	return (0);
+	else
+		s->segments = new;
+	return (1);
 }
 
 int				ft_get_segment(t_struct *s, struct load_command *lc, int bin_size)
 {
-	if (bin_size == 32)
-		ft_get_segment_32(s, lc);
-	else if (bin_size == 64)
-		ft_get_segment_64(s, lc);
+	if (bin_size == 32 && lc->cmd == LC_SEGMENT)
+		ft_add_segment(s, SEGMENT_32(lc), SEGMENT_32(lc)->segname);
+	else if (bin_size == 64 && lc->cmd == LC_SEGMENT_64)
+		ft_add_segment(s, SEGMENT_64(lc), SEGMENT_64(lc)->segname);
 	return (1);
 }

@@ -1,5 +1,6 @@
 #include "otool.h"
 
+#include <stdio.h>
 int		ft_handle_64(t_struct *s)
 {
 	struct load_command		*lc;

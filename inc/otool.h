@@ -42,8 +42,9 @@ typedef struct			s_segment
 typedef struct			s_struct
 {
 	int					options;
-	void				*maped_file;
+	char				*file_name;
 	unsigned int		file_size;
+	void				*maped_file;
 	t_segment			*segments;
 }						t_struct;
 
@@ -61,6 +62,11 @@ int						ft_handle_64(t_struct *s);
 *	ft_get_segment.c
 */
 int						ft_get_segment(t_struct *s, struct load_command *lc, int bin_size);
+
+/*
+*	ft_print_output
+*/
+void					ft_print_output(t_struct *s);
 
 /*
 *	ft_option.c

@@ -1,5 +1,6 @@
 #include "otool.h"
 
+#include <stdio.h>
 int		ft_otool(t_struct *s)
 {
 	unsigned int magic;

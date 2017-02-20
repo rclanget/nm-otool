@@ -32,14 +32,14 @@ static int	ft_map_file(t_struct *s, char *file)
 	return (EXIT_SUCCESS);
 }
 
+#include <stdio.h>
+#include <strings.h>
 int			main(int ac, char **av)
 {
 	t_struct	s;
 	int			nb_opt;
 
-	s.options = 0;
-	s.maped_file = 0;
-	s.file_size = 0;
+	bzero(&s, sizeof(t_struct));
 	if ((nb_opt = ft_option(av, &s.options)) == -1)
 		return (1);
 	// if (ac == 1)
@@ -48,10 +48,12 @@ int			main(int ac, char **av)
 	ac -= nb_opt;
 	while (--ac)
 	{
+		s.file_name = *av;
 		if (ft_map_file(&s, *av) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		if (ft_otool(&s) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
+		ft_print_output(&s);
 		if (ft_munmmap_file(&s) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		++av;
