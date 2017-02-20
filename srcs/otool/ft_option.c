@@ -54,12 +54,14 @@ static int	ft_option_activate(char **arg, int *options)
 	return (0);
 }
 
-char		**ft_option(char **arg, int *options)
+int			ft_option(char **arg, int *options)
 {
 	char	c;
 	char	*program;
+	int		nb_opt;
 
 	program = *arg;
+	nb_opt = 0;
 	++arg;
 	while (arg && *arg)
 	{
@@ -68,15 +70,16 @@ char		**ft_option(char **arg, int *options)
 			if (!*(*arg + 1) || (c = ft_option_activate(arg, options)))
 			{
 				if (c == '-')
-					return (++arg);
+					return (++nb_opt);
 				if (c != 'h')
 					ft_option_error(program, c);
-				return (0);
+				return (-1);
 			}
+			++nb_opt;
 		}
 		else
 			break ;
 		arg++;
 	}
-	return (arg);
+	return (nb_opt);
 }

@@ -34,16 +34,18 @@ static int	ft_map_file(t_struct *s, char *file)
 
 int			main(int ac, char **av)
 {
-	int			options;
 	t_struct	s;
+	int			nb_opt;
 
-	options = 0;
+	s.options = 0;
 	s.maped_file = 0;
 	s.file_size = 0;
-	if (!(av = ft_option(av, &options)))
+	if ((nb_opt = ft_option(av, &s.options)) == -1)
 		return (1);
 	// if (ac == 1)
 		// *test = "a.out";
+	av = (av + (nb_opt + 1));
+	ac -= nb_opt;
 	while (--ac)
 	{
 		if (ft_map_file(&s, *av) == EXIT_FAILURE)
