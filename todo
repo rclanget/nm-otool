@@ -1,5 +1,6 @@
 todo:
-	- finir la partie pour 64 bits
+	- finir la partie pour 64 bits (enregistrer les infos dans la liste chainée
+	  et, suivants les options, les affichers à la fin)
 	- lister les différents formats à gérer
 	- faire le traitement pour chaque format
 	- main: si aucun argument, traiter le fichier "a.out"
