@@ -8,9 +8,10 @@ SRC_NAME	=	main.c \
 				ft_otool.c \
 				ft_option.c \
 				tools.c \
+				ft_handle_32.c \
 				ft_handle_64.c \
-				ft_get_segment.c \
-				ft_print_output.c
+				ft_add_segment.c \
+				ft_swap.c
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
 
 OBJ_PATH	=	./obj/

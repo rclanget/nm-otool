@@ -53,7 +53,6 @@ int			main(int ac, char **av)
 			return (EXIT_FAILURE);
 		if (ft_otool(&s) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
-		ft_print_output(&s);
 		if (ft_munmmap_file(&s) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		++av;

@@ -5,6 +5,8 @@
 #include <stdlib.h>
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
+#include <mach-o/fat.h>
+#include <mach/machine.h>
 
 # define OPTIONS		"aSfHlLdt"
 # define OPT_A			1
@@ -29,6 +31,9 @@
 # define HEADER_32(x)	((struct mach_header	*)(x))
 # define HEADER_64(x)	((struct mach_header_64	*)(x))
 
+# define HEADER_FAT_32(x) ((struct fat_header *)(x))
+# define HEADER_FAT_64(x) ((struct fat_header_64 *)(x))
+
 # define SEGMENT_32(x)	((struct segment_command *)(x))
 # define SEGMENT_64(x)	((struct segment_command_64 *)(x))
 
@@ -45,6 +50,7 @@ typedef struct			s_struct
 	char				*file_name;
 	unsigned int		file_size;
 	void				*maped_file;
+	char				swap;
 	t_segment			*segments;
 }						t_struct;
 
@@ -54,14 +60,19 @@ typedef struct			s_struct
 int						ft_otool(t_struct *s);
 
 /*
+*	ft_handle_32.c
+*/
+int						ft_handle_32(t_struct *s);
+
+/*
 *	ft_handle_64.c
 */
 int						ft_handle_64(t_struct *s);
 
 /*
-*	ft_get_segment.c
+*	ft_add_segment.c
 */
-int						ft_get_segment(t_struct *s, struct load_command *lc, int bin_size);
+int						ft_add_segment(t_struct *s, void *segment, char *segname);
 
 /*
 *	ft_print_output
@@ -72,6 +83,12 @@ void					ft_print_output(t_struct *s);
 *	ft_option.c
 */
 int						ft_option(char **arg, int *options);
+
+/*
+*	ft_swap.c
+*/
+int64_t					ft_swap_64(t_struct *s, int64_t i);
+uint32_t				ft_swap_32(t_struct *s, uint32_t val);
 
 /*
 *	tools.c
