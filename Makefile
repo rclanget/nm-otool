@@ -10,6 +10,8 @@ SRC_NAME	=	main.c \
 				tools.c \
 				ft_handle_32.c \
 				ft_handle_64.c \
+				ft_handle_fat.c \
+				ft_handle_arch.c \
 				ft_add_segment.c \
 				ft_swap.c
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))

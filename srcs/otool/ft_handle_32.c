@@ -13,11 +13,11 @@ void	ft_print_output_section_32(t_struct *s, t_segment *segment, char *sectname)
 	void				*p;
 	void				*end;
 	int					nsects;
-	struct section	*section;
+	struct section		*section;
 	int					i = 0;
 
 	nsects = SEGMENT_32(segment->segment)->nsects;
-	section = (struct section *)((char *)SEGMENT_32(segment->segment) + sizeof(struct segment_command));
+	section = segment->section;
 	while (nsects--)
 	{
 		if (!strcmp(section->sectname, sectname))
@@ -25,18 +25,16 @@ void	ft_print_output_section_32(t_struct *s, t_segment *segment, char *sectname)
 			start = s->maped_file + section->offset;
 			p = s->maped_file + section->offset;
 			end = start + section->size;
-			printf("Contents of (%s,%s) section\n", section->segname, section->sectname);
-			printf("\n%08x%c", section->addr, !strcmp(sectname, "__text") ? ' ' : '	');
-			i = 0;
+			printf("(%s,%s) section", section->segname, section->sectname);
 			while (start < end)
 			{
-				printf("%02hhx ", *(char *)start);
-				if (i++ == 15)
+				printf("\n%08lx%c", section->addr + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
+				i = 0;
+				while (i++ < 16 && start < end)
 				{
-					printf("\n%08lx%c", section->addr + (start - p + 1), !strcmp(sectname, "__text") ? ' ' : '	');
-					i = 0;
+					printf("%02hhx ", *(char *)start);
+					start++;
 				}
-				start++;
 			}
 			printf("\n");
 		}
@@ -68,7 +66,10 @@ void	ft_print_output_32(t_struct *s)
 	t_segment	*segments;
 
 	segments = s->segments;
-	printf("%s:\n", s->file_name);
+	if (!s->archive_name)
+		printf("%s:\n", s->file_name);
+	else
+		printf("%s(%s):\n", s->archive_name, s->file_name);
 	if (s->options & OPT_A)
 		ft_print_output_header_32(s, ARCHIVE);
 	if (s->options & OPT_H)
@@ -77,14 +78,13 @@ void	ft_print_output_32(t_struct *s)
 		ft_print_output_header_32(s, UNIVERSAL);
 	while (segments)
 	{
-		if (s->options & OPT_T && !strcmp(segments->segname, "__TEXT"))
+		if (s->options & OPT_T && !strcmp(((struct section *)segments->section)->segname, "__TEXT"))
 			ft_print_output_section_32(s, segments, "__text");
-		if (s->options & OPT_D && !strcmp(segments->segname, "__DATA"))
+		if (s->options & OPT_D && !strcmp(((struct section *)segments->section)->segname, "__DATA"))
 			ft_print_output_section_32(s, segments, "__data");
 		segments = segments->next;
 	}
 }
-
 int	ft_handle_32(t_struct *s)
 {
 	struct load_command	*lc;

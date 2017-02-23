@@ -1,6 +1,6 @@
 #include "otool.h"
 
-int	ft_add_segment(t_struct *s, void *segment, char *segname)
+int	ft_add_segment(t_struct *s, void *segment, void *section)
 {
 	t_segment *list;
 	t_segment *new;
@@ -8,7 +8,7 @@ int	ft_add_segment(t_struct *s, void *segment, char *segname)
 	list = s->segments;
 	new = (t_segment *)malloc(sizeof(t_segment));
 	new->segment = segment;
-	new->segname = segname;
+	new->section = section;
 	new->next = NULL;
 	if (list)
 	{

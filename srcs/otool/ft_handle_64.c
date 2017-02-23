@@ -15,8 +15,9 @@ void	ft_print_output_section_64(t_struct *s, t_segment *segment, char *sectname)
 	int					nsects;
 	struct section_64	*section;
 	int					i = 0;
+
 	nsects = SEGMENT_64(segment->segment)->nsects;
-	section = (struct section_64 *)((char *)SEGMENT_64(segment->segment) + sizeof(struct segment_command_64));
+	section = segment->section;
 	while (nsects--)
 	{
 		if (!strcmp(section->sectname, sectname))
@@ -24,17 +25,16 @@ void	ft_print_output_section_64(t_struct *s, t_segment *segment, char *sectname)
 			start = s->maped_file + section->offset;
 			p = s->maped_file + section->offset;
 			end = start + section->size;
-			printf("Contents of (%s,%s) section\n", section->segname, section->sectname);
-			printf("%016lx%c", section->addr, !strcmp(sectname, "__text") ? ' ' : '	');
+			printf("(%s,%s) section", section->segname, section->sectname);
 			while (start < end)
 			{
-				printf("%02hhx ", *(char *)start);
-				if (i++ == 15)
+				printf("\n%016lx%c", section->addr + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
+				i = 0;
+				while (i++ < 16 && start < end)
 				{
-					i = 0;
-					printf("\n%016lx%c", section->addr + (start - p + 1), !strcmp(sectname, "__text") ? ' ' : '	');
+					printf("%02hhx ", *(char *)start);
+					start++;
 				}
-				start++;
 			}
 			printf("\n");
 		}
@@ -67,7 +67,10 @@ void	ft_print_output_64(t_struct *s)
 	t_segment	*segments;
 
 	segments = s->segments;
-	printf("%s:\n", s->file_name);
+	if (!s->archive_name)
+		printf("%s:\n", s->file_name);
+	else
+		printf("%s(%s):\n", s->archive_name, s->file_name);
 	if (s->options & OPT_A)
 		ft_print_output_header_64(s, ARCHIVE);
 	if (s->options & OPT_H)
@@ -76,25 +79,33 @@ void	ft_print_output_64(t_struct *s)
 		ft_print_output_header_64(s, UNIVERSAL);
 	while (segments)
 	{
-		if (s->options & OPT_T && !strcmp(segments->segname, "__TEXT"))
+		if (s->options & OPT_T && !strcmp(((struct section_64 *)segments->section)->segname, "__TEXT"))
 			ft_print_output_section_64(s, segments, "__text");
-		if (s->options & OPT_D && !strcmp(segments->segname, "__DATA"))
+		if (s->options & OPT_D && !strcmp(((struct section_64 *)segments->section)->segname, "__DATA"))
 			ft_print_output_section_64(s, segments, "__data");
 		segments = segments->next;
 	}
 }
 
+#include <unistd.h>
 int	ft_handle_64(t_struct *s)
 {
 	struct load_command	*lc;
 	unsigned int		ncmds;
 
 	ncmds = HEADER_64(s->maped_file)->ncmds;
-	lc = (struct load_command *)((char *)HEADER_64(s->maped_file) + sizeof(struct mach_header_64));
+	lc = (struct load_command *)((char *)s->maped_file + sizeof(struct mach_header_64));
 	while (ncmds--)
 	{
 		if (lc->cmd == LC_SEGMENT_64)
-			ft_add_segment(s, SEGMENT_64(lc), SEGMENT_64(lc)->segname);
+		{
+			struct segment_command_64 *seg64;
+			seg64 = (struct segment_command_64 *)lc;
+			struct section_64 *sect64;
+			sect64 = (struct section_64 *)((char *)seg64 + sizeof(struct segment_command_64));
+
+			ft_add_segment(s, seg64, sect64);
+		}
 		lc = (struct load_command *)((char *)lc + lc->cmdsize);
 	}
 	ft_print_output_64(s);

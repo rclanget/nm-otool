@@ -6,6 +6,7 @@
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 #include <mach-o/fat.h>
+// #include <mach-o/ar.h>
 #include <mach/machine.h>
 
 # define OPTIONS		"aSfHlLdt"
@@ -31,16 +32,15 @@
 # define HEADER_32(x)	((struct mach_header	*)(x))
 # define HEADER_64(x)	((struct mach_header_64	*)(x))
 
-# define HEADER_FAT_32(x) ((struct fat_header *)(x))
-# define HEADER_FAT_64(x) ((struct fat_header_64 *)(x))
+# define HEADER_FAT(x) ((struct fat_header *)(x))
 
 # define SEGMENT_32(x)	((struct segment_command *)(x))
 # define SEGMENT_64(x)	((struct segment_command_64 *)(x))
 
 typedef struct			s_segment
 {
+	void				*section;
 	void				*segment;
-	char				*segname;
 	struct s_segment	*next;
 }						t_segment;
 
@@ -48,7 +48,9 @@ typedef struct			s_struct
 {
 	int					options;
 	char				*file_name;
+	char				*archive_name;
 	unsigned int		file_size;
+	unsigned int		offset;
 	void				*maped_file;
 	char				swap;
 	t_segment			*segments;
@@ -70,9 +72,20 @@ int						ft_handle_32(t_struct *s);
 int						ft_handle_64(t_struct *s);
 
 /*
+*	ft_handle_fat.c
+*/
+int						ft_handle_fat_32(t_struct *s);
+int						ft_handle_fat_64(t_struct *s);
+
+/*
+*	ft_handle_arch.c
+*/
+int						ft_handle_arch(t_struct *s);
+
+/*
 *	ft_add_segment.c
 */
-int						ft_add_segment(t_struct *s, void *segment, char *segname);
+int						ft_add_segment(t_struct *s, void *segment, void *section);
 
 /*
 *	ft_print_output
