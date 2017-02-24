@@ -16,19 +16,19 @@ void	ft_print_output_section_64(t_struct *s, t_segment *segment, char *sectname)
 	struct section_64	*section;
 	int					i = 0;
 
-	nsects = SEGMENT_64(segment->segment)->nsects;
+	nsects = ft_swap_64(s, SEGMENT_64(segment->segment)->nsects);
 	section = segment->section;
 	while (nsects--)
 	{
 		if (!strcmp(section->sectname, sectname))
 		{
-			start = s->maped_file + section->offset;
-			p = s->maped_file + section->offset;
-			end = start + section->size;
+			start = s->maped_file + ft_swap_64(s, section->offset);
+			p = s->maped_file + ft_swap_64(s, section->offset);
+			end = start + ft_swap_64(s, section->size);
 			printf("(%s,%s) section", section->segname, section->sectname);
 			while (start < end)
 			{
-				printf("\n%016lx%c", section->addr + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
+				printf("\n%016lx%c", ft_swap_64(s, section->addr) + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
 				i = 0;
 				while (i++ < 16 && start < end)
 				{
@@ -49,15 +49,15 @@ void	ft_print_output_header_64(t_struct *s, int type)
 	{
 		printf("%10s %-8s %-11s %-5s %-9s%-6s%-11s %10s\n",
 				"magic", "cputype", "cpusubtype", "caps", "filetype", "ncmds", "sizeofcmds", "flags");
-		printf("0x%8x %-8u %11u %5s %9u%6u%11u 0x%08x\n",
-				HEADER_64(s->maped_file)->magic,
-				HEADER_64(s->maped_file)->cputype,
-				HEADER_64(s->maped_file)->cpusubtype,
+		printf("0x%8lx %-8lu %11lu %5s %9lu%6lu%11lu 0x%08lx\n",
+				ft_swap_64(s, HEADER_64(s->maped_file)->magic),
+				ft_swap_64(s, HEADER_64(s->maped_file)->cputype),
+				ft_swap_64(s, HEADER_64(s->maped_file)->cpusubtype),
 				"0x80",
-				HEADER_64(s->maped_file)->filetype,
-				HEADER_64(s->maped_file)->ncmds,
-				HEADER_64(s->maped_file)->sizeofcmds,
-				HEADER_64(s->maped_file)->flags
+				ft_swap_64(s, HEADER_64(s->maped_file)->filetype),
+				ft_swap_64(s, HEADER_64(s->maped_file)->ncmds),
+				ft_swap_64(s, HEADER_64(s->maped_file)->sizeofcmds),
+				ft_swap_64(s, HEADER_64(s->maped_file)->flags)
 		);
 	}
 }
@@ -93,11 +93,11 @@ int	ft_handle_64(t_struct *s)
 	struct load_command	*lc;
 	unsigned int		ncmds;
 
-	ncmds = HEADER_64(s->maped_file)->ncmds;
+	ncmds = ft_swap_64(s, HEADER_64(s->maped_file)->ncmds);
 	lc = (struct load_command *)((char *)s->maped_file + sizeof(struct mach_header_64));
 	while (ncmds--)
 	{
-		if (lc->cmd == LC_SEGMENT_64)
+		if (ft_swap_64(s, lc->cmd) == LC_SEGMENT_64)
 		{
 			struct segment_command_64 *seg64;
 			seg64 = (struct segment_command_64 *)lc;
@@ -105,7 +105,7 @@ int	ft_handle_64(t_struct *s)
 			sect64 = (struct section_64 *)((char *)seg64 + sizeof(struct segment_command_64));
 			ft_add_segment(s, seg64, sect64);
 		}
-		lc = (struct load_command *)((char *)lc + lc->cmdsize);
+		lc = (struct load_command *)((char *)lc + ft_swap_64(s, lc->cmdsize));
 	}
 	ft_print_output_64(s);
 	return (0);

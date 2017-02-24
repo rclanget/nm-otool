@@ -16,19 +16,19 @@ void	ft_print_output_section_32(t_struct *s, t_segment *segment, char *sectname)
 	struct section		*section;
 	int					i = 0;
 
-	nsects = SEGMENT_32(segment->segment)->nsects;
+	nsects = ft_swap_32(s, SEGMENT_32(segment->segment)->nsects);
 	section = segment->section;
 	while (nsects--)
 	{
 		if (!strcmp(section->sectname, sectname))
 		{
-			start = s->maped_file + section->offset;
-			p = s->maped_file + section->offset;
-			end = start + section->size;
+			start = s->maped_file + ft_swap_32(s, section->offset);
+			p = s->maped_file + ft_swap_32(s, section->offset);
+			end = start + ft_swap_32(s, section->size);
 			printf("(%s,%s) section", section->segname, section->sectname);
 			while (start < end)
 			{
-				printf("\n%08lx%c", section->addr + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
+				printf("\n%08lx%c", ft_swap_32(s, section->addr) + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
 				i = 0;
 				while (i++ < 16 && start < end)
 				{
@@ -49,14 +49,14 @@ void	ft_print_output_header_32(t_struct *s, int type)
 		printf("%10s %-8s %-11s %-5s %-9s%-6s%-11s %10s\n",
 				"magic", "cputype", "cpusubtype", "caps", "filetype", "ncmds", "sizeofcmds", "flags");
 		printf("0x%8x %-8u %11u %5s %9u%6u%11u 0x%08x\n",
-				HEADER_32(s->maped_file)->magic,
-				HEADER_32(s->maped_file)->cputype,
-				HEADER_32(s->maped_file)->cpusubtype,
+				ft_swap_32(s, HEADER_32(s->maped_file)->magic),
+				ft_swap_32(s, HEADER_32(s->maped_file)->cputype),
+				ft_swap_32(s, HEADER_32(s->maped_file)->cpusubtype),
 				"0x80",
-				HEADER_32(s->maped_file)->filetype,
-				HEADER_32(s->maped_file)->ncmds,
-				HEADER_32(s->maped_file)->sizeofcmds,
-				HEADER_32(s->maped_file)->flags
+				ft_swap_32(s, HEADER_32(s->maped_file)->filetype),
+				ft_swap_32(s, HEADER_32(s->maped_file)->ncmds),
+				ft_swap_32(s, HEADER_32(s->maped_file)->sizeofcmds),
+				ft_swap_32(s, HEADER_32(s->maped_file)->flags)
 		);
 	}
 }
@@ -88,13 +88,13 @@ void	ft_print_output_32(t_struct *s)
 int	ft_handle_32(t_struct *s)
 {
 	struct load_command	*lc;
-	int					ncmds;
+	uint32_t			ncmds;
 
-	ncmds = HEADER_32(s->maped_file)->ncmds;
+	ncmds = ft_swap_32(s, HEADER_32(s->maped_file)->ncmds);
 	lc = (struct load_command *)((char *)HEADER_32(s->maped_file) + sizeof(struct mach_header));
 	while (ncmds--)
 	{
-		if (lc->cmd == LC_SEGMENT)
+		if (ft_swap_32(s, lc->cmd) == LC_SEGMENT)
 		{
 			struct segment_command *seg32;
 			seg32 = (struct segment_command *)lc;
@@ -102,7 +102,7 @@ int	ft_handle_32(t_struct *s)
 			sect32 = (struct section *)((char *)seg32 + sizeof(struct segment_command));
 			ft_add_segment(s, seg32, sect32);
 		}
-		lc = (struct load_command *)((char *)lc + lc->cmdsize);
+		lc = (struct load_command *)((char *)lc + ft_swap_32(s, lc->cmdsize));
 	}
 	ft_print_output_32(s);
 	return (0);

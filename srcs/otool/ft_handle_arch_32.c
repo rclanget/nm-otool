@@ -75,8 +75,8 @@ int						ft_handle_arch_32(t_struct *s)
 	uint32_t 		i = 0;
 	void 			*tmp;
 	void 			*save_maped_file;
-	unsigned int 	nranlib;
-	
+	uint32_t	 	nranlib;
+
 	rlib = get_ranlib_structures(s);
 	save_maped_file = s->maped_file;
 	nranlib = get_ranlib_number(s);
