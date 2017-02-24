@@ -13,9 +13,9 @@ int		ft_handle_fat_64(t_struct *s)
 	arch = (struct fat_arch_64 *)(maped_file + sizeof(struct fat_header));
 	while (nfat_arch--)
 	{
-		if (ft_swap_32(s, arch->cputype) == CPU_TYPE_X86_64)
+		if (ft_swap_64(s, arch->cputype) == CPU_TYPE_X86_64)
 		{
-			s->maped_file = (void *)((char *)maped_file + ft_swap_32(s, arch->offset));
+			s->maped_file = (void *)((char *)maped_file + ft_swap_64(s, arch->offset));
 			s->swap = 0;
 			ft_otool(s);
 			s->swap = save_swap;
