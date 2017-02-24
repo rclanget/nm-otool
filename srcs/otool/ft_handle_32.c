@@ -95,7 +95,13 @@ int	ft_handle_32(t_struct *s)
 	while (ncmds--)
 	{
 		if (lc->cmd == LC_SEGMENT)
-			ft_add_segment(s, SEGMENT_32(lc), SEGMENT_32(lc)->segname);
+		{
+			struct segment_command *seg32;
+			seg32 = (struct segment_command *)lc;
+			struct section *sect32;
+			sect32 = (struct section *)((char *)seg32 + sizeof(struct segment_command));
+			ft_add_segment(s, seg32, sect32);
+		}
 		lc = (struct load_command *)((char *)lc + lc->cmdsize);
 	}
 	ft_print_output_32(s);

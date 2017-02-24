@@ -103,7 +103,6 @@ int	ft_handle_64(t_struct *s)
 			seg64 = (struct segment_command_64 *)lc;
 			struct section_64 *sect64;
 			sect64 = (struct section_64 *)((char *)seg64 + sizeof(struct segment_command_64));
-
 			ft_add_segment(s, seg64, sect64);
 		}
 		lc = (struct load_command *)((char *)lc + lc->cmdsize);
