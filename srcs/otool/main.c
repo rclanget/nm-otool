@@ -1,5 +1,6 @@
 #include "otool.h"
 
+#include "libft.h"
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <unistd.h>
@@ -42,10 +43,9 @@ int			main(int ac, char **av)
 	bzero(&s, sizeof(t_struct));
 	if ((nb_opt = ft_option(av, &s.options)) == -1)
 		return (1);
-	// if (ac == 1)
-		// *test = "a.out";
-	av = (av + (nb_opt + 1));
-	ac -= nb_opt;
+	av = (av + (nb_opt + 1));	
+	if ((ac -= nb_opt) == 1 && ++ac)
+		*av = "a.out";
 	while (--ac)
 	{
 		s.file_name = *av;

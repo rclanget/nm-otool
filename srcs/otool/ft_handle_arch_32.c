@@ -1,5 +1,6 @@
 #include "otool.h"
 
+#include "libft.h"
 #include <unistd.h>
 #include <string.h>
 #include <mach-o/ar.h>
@@ -7,38 +8,7 @@
 
 #include <stdio.h>
 
-int	ft_strcmp(const char *s1, const char *s2)
-{
-	int t;
-
-	t = 0;
-	while (s1[t] == s2[t] && s1[t])
-	{
-		t++;
-	}
-	return (s1[t] - s2[t]);
-}
-
-char	*ft_strstr(const char *s1, const char *s2)
-{
-	int t;
-	int i;
-
-	i = 0;
-	if (s2 == NULL || s2[i] == 0)
-		return ((char*)s1);
-	while (s1[i])
-	{
-		t = 0;
-		while (s1[t + i] == s2[t])
-			if (s2[++t] == '\0')
-				return ((char*)(s1 + i));
-		i++;
-	}
-	return (NULL);
-}
-
-uint32_t				get_ranlib_number(t_struct *s)
+static uint32_t			get_ranlib_number(t_struct *s)
 {
 	struct ar_hdr	*ar;
 	uint32_t 		size;
@@ -51,7 +21,7 @@ uint32_t				get_ranlib_number(t_struct *s)
 	return (nranlib);
 }
 
-struct ranlib			*sort_ranlib(struct ranlib *rlib, uint32_t nranlib)
+static struct ranlib	*sort_ranlib(struct ranlib *rlib, uint32_t nranlib)
 {
 	struct ranlib *rlib_sort;
 	struct ranlib buf;
@@ -82,7 +52,7 @@ struct ranlib			*sort_ranlib(struct ranlib *rlib, uint32_t nranlib)
 	return (rlib_sort);
 }
 
-struct ranlib			*get_ranlib_structures(t_struct *s)
+static struct ranlib	*get_ranlib_structures(t_struct *s)
 {
 	struct ar_hdr	*ar;
 	struct ranlib 	*rlib;
@@ -98,7 +68,7 @@ struct ranlib			*get_ranlib_structures(t_struct *s)
 }
 
 
-int						ft_handle_arch(t_struct *s)
+int						ft_handle_arch_32(t_struct *s)
 {
 	struct ranlib	*rlib;
 	char 			*function_name;

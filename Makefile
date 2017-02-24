@@ -6,12 +6,11 @@ CFLAGS		=	-Werror -Wall -Wextra
 SRC_PATH	=	./srcs/otool/
 SRC_NAME	=	main.c \
 				ft_otool.c \
-				ft_option.c \
-				tools.c \
 				ft_handle_32.c \
 				ft_handle_64.c \
 				ft_handle_fat.c \
-				ft_handle_arch.c \
+				ft_handle_arch_32.c \
+				ft_handle_arch_64.c \
 				ft_add_segment.c \
 				ft_swap.c
 SRC			=	$(addprefix $(SRC_PATH),$(SRC_NAME))
@@ -20,28 +19,32 @@ OBJ_PATH	=	./obj/
 OBJ_NAME	=	$(SRC_NAME:.c=.o)
 OBJ			=	$(addprefix $(OBJ_PATH),$(OBJ_NAME))
 
-INC_PATH	=	./inc/
+INC_PATH	=	./inc/ ./libft/includes/
 INC			=	$(addprefix -I,$(INC_PATH))
 
+LIB			=	-L ./libft -lft
 
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@$(CC) $(LDFLAGS) $(OBJ) -o $@ && \
+	@$(CC) $(LDFLAGS) $(OBJ) $(LIB) -o $@ && \
 		printf " -->> \033[32mCompilation Success: %s\033[0m             \n" "$@"|| \
 		printf " -->> \033[31mCompilation Failed: %s\033[0m              \n" "$@";
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c
+	@make -C libft
 	@mkdir -p $(OBJ_PATH)
 	@$(CC) $(CFLAGS) -o $@ -c $< $(INC) && \
 		printf " -->> \033[32mOk\033[0m: %s                       \r" "$@" || \
 		printf " -->> \033[31mKo\033[0m: %s                       \r" "$@";
 
 clean:
+	@make clean -C libft
 	@rm -rfv $(OBJ_PATH)
 
 fclean: clean
+	@make fclean -C libft
 	@rm -fv $(NAME)
 
 re: fclean all

@@ -28,7 +28,7 @@ void	ft_print_output_section_64(t_struct *s, t_segment *segment, char *sectname)
 			printf("(%s,%s) section", section->segname, section->sectname);
 			while (start < end)
 			{
-				printf("\n%016llx%c", section->addr + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
+				printf("\n%016lx%c", section->addr + (start - p), !strcmp(sectname, "__text") ? ' ' : '	');
 				i = 0;
 				while (i++ < 16 && start < end)
 				{
