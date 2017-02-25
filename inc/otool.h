@@ -9,14 +9,8 @@
 // #include <mach-o/ar.h>
 #include <mach/machine.h>
 
-# define OPT_A			1
-# define OPT_S			2
-# define OPT_F			4
-# define OPT_H			8
-# define OPT_L			16
-# define OPT_LL			32
-# define OPT_D			64
-# define OPT_T			128
+# define OPT_D			1
+# define OPT_T			2
 
 # define MMAP_FLAG		PROT_READ, MAP_PRIVATE
 

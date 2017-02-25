@@ -40,7 +40,7 @@ int			main(int ac, char **av)
 	t_struct	s;
 	int			nb_opt;
 
-	bzero(&s, sizeof(t_struct));
+	ft_bzero(&s, sizeof(t_struct));
 	if ((nb_opt = ft_option(av, &s.options)) == -1)
 		return (1);
 	av = (av + (nb_opt + 1));	

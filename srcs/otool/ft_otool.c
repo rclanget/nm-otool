@@ -36,7 +36,7 @@ int		ft_otool(t_struct *s)
 		return (ft_handle_fat_32(s));
 	else if (magic == FAT_MAGIC_64 || (magic == FAT_CIGAM_64  && (s->swap = 1)))
 		return (ft_handle_fat_64(s));
-	else if (!strncmp(s->maped_file, ARMAG, SARMAG))
+	else if (!ft_strncmp(s->maped_file, ARMAG, SARMAG))
 	{
 		if (ft_is_arch_32(s->maped_file))
 			return (ft_handle_arch_32(s));

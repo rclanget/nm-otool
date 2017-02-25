@@ -29,8 +29,8 @@ static struct ranlib_64	*sort_ranlib(struct ranlib_64 *rlib, uint64_t nranlib)
 	uint64_t			i;
 
 	rlib_sort = (struct ranlib_64 *)malloc(sizeof(struct ranlib_64) * (nranlib));
-	bzero(rlib_sort, sizeof(struct ranlib_64) * (nranlib));
-	memcpy(rlib_sort, rlib, sizeof(struct ranlib_64) * nranlib);
+	ft_bzero(rlib_sort, sizeof(struct ranlib_64) * (nranlib));
+	ft_memcpy(rlib_sort, rlib, sizeof(struct ranlib_64) * nranlib);
 	is_sorted = 0;
 	i = 0;
 	while (!is_sorted)
@@ -41,9 +41,9 @@ static struct ranlib_64	*sort_ranlib(struct ranlib_64 *rlib, uint64_t nranlib)
 		{
 			if (rlib_sort[i].ran_off > rlib_sort[i + 1].ran_off)
 			{
-				memcpy(&buf, &rlib_sort[i], sizeof(struct ranlib_64));
-				memcpy(&rlib_sort[i], &rlib_sort[i + 1], sizeof(struct ranlib_64));
-				memcpy(&rlib_sort[i + 1], &buf, sizeof(struct ranlib_64));
+				ft_memcpy(&buf, &rlib_sort[i], sizeof(struct ranlib_64));
+				ft_memcpy(&rlib_sort[i], &rlib_sort[i + 1], sizeof(struct ranlib_64));
+				ft_memcpy(&rlib_sort[i + 1], &buf, sizeof(struct ranlib_64));
 				is_sorted = 0;
 			}
 			i++;
@@ -84,7 +84,7 @@ int						ft_handle_arch_64(t_struct *s)
 	while (i < nranlib)
 	{
 		function_name = (char *)s->maped_file + rlib[i].ran_off + sizeof(struct ar_hdr);
-		tmp = (void *)(function_name + atoi(((struct ar_hdr *)((char *)s->maped_file + rlib[i].ran_off))->ar_name + 3));
+		tmp = (void *)(function_name + ft_atoi(((struct ar_hdr *)((char *)s->maped_file + rlib[i].ran_off))->ar_name + 3));
 		s->file_name = function_name;
 		s->maped_file = tmp;
 		s->segments = NULL;
