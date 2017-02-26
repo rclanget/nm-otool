@@ -26,18 +26,18 @@ static void	ft_print_output_section_32(t_struct *s, t_segment *segment, char *se
 			start = s->maped_file + ft_swap_32(s, section->offset);
 			p = s->maped_file + ft_swap_32(s, section->offset);
 			end = start + ft_swap_32(s, section->size);
-			printf("(%s,%s) section", section->segname, section->sectname);
+			ft_printf("(%s,%s) section", section->segname, section->sectname);
 			while (start < end)
 			{
-				printf("\n%08lx%c", ft_swap_32(s, section->addr) + (start - p), !ft_strcmp(sectname, "__text") ? ' ' : '	');
+				ft_printf("\n%-08x%c", ft_swap_32(s, section->addr) + (start - p), !ft_strcmp(sectname, "__text") ? ' ' : '	');
 				i = 0;
 				while (i++ < 16 && start < end)
 				{
-					printf("%02hhx ", *(char *)start);
+					ft_printf("%-02x ", (uint64_t)(unsigned char)(*(char *)start));
 					start++;
 				}
 			}
-			printf("\n");
+			ft_printf("\n");
 		}
 		section = (struct section *)((char *)section + sizeof(struct section));
 	}
@@ -49,9 +49,9 @@ static void	ft_print_output_32(t_struct *s)
 
 	segments = s->segments;
 	if (!s->archive_name)
-		printf("%s:\n", s->file_name);
+		ft_printf("%s:\n", s->file_name);
 	else
-		printf("%s(%s):\n", s->archive_name, s->file_name);
+		ft_printf("%s(%s):\n", s->archive_name, s->file_name);
 	while (segments)
 	{
 		if (s->options & OPT_T && !ft_strcmp(((struct section *)segments->section)->segname, "__TEXT"))

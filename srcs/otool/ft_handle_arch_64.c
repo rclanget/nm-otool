@@ -6,8 +6,6 @@
 #include <mach-o/ar.h>
 #include <mach-o/ranlib.h>
 
-#include <stdio.h>
-
 static uint64_t			get_ranlib_number(t_struct *s)
 {
 	struct ar_hdr	*ar;
@@ -80,7 +78,7 @@ int						ft_handle_arch_64(t_struct *s)
 	rlib = get_ranlib_structures(s);
 	save_maped_file = s->maped_file;
 	nranlib = get_ranlib_number(s);
-	printf("Archive : %s\n", s->archive_name);
+	ft_print("Archive : %s\n", s->archive_name);
 	while (i < nranlib)
 	{
 		function_name = (char *)s->maped_file + rlib[i].ran_off + sizeof(struct ar_hdr);
