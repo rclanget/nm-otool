@@ -1,4 +1,3 @@
 todo:
-	- créer la fonction de print
 	- faire le traitement pour dylib
 	- vérifier à ne jamais dépasser la taille du fichier
