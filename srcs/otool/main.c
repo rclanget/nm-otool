@@ -33,8 +33,6 @@ static int	ft_map_file(t_struct *s, char *file)
 	return (EXIT_SUCCESS);
 }
 
-#include <stdio.h>
-#include <strings.h>
 int			main(int ac, char **av)
 {
 	t_struct	s;

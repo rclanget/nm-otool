@@ -5,9 +5,6 @@
 #include <mach-o/ranlib.h>
 #include <unistd.h>
 
-#include <stdio.h>
-#include <string.h>
-
 int		ft_is_arch_32(void *maped_file)
 {
 	char *symdef;

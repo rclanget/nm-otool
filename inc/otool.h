@@ -6,7 +6,6 @@
 #include <mach-o/loader.h>
 #include <mach-o/nlist.h>
 #include <mach-o/fat.h>
-// #include <mach-o/ar.h>
 #include <mach/machine.h>
 
 # define OPT_D			1

@@ -5,9 +5,6 @@
 # define MACH		2
 # define UNIVERSAL	3
 
-#include <stdio.h>
-#include <string.h>
-
 static void	ft_print_output_section_64(t_struct *s, t_segment *segment, char *sectname)
 {
 	void				*start;
@@ -15,8 +12,9 @@ static void	ft_print_output_section_64(t_struct *s, t_segment *segment, char *se
 	void				*end;
 	int					nsects;
 	struct section_64	*section;
-	int					i = 0;
+	int					i;
 
+	i = 0;
 	nsects = ft_swap_64(s, SEGMENT_64(segment->segment)->nsects);
 	section = segment->section;
 	while (nsects--)
@@ -68,7 +66,7 @@ int			ft_handle_64(t_struct *s)
 	struct load_command	*lc;
 	unsigned int		ncmds;
 
-	ncmds = ft_swap_64(s, HEADER_64(s->maped_file)->ncmds);
+	ncmds = ft_swap_64(s, HEADER_32(s->maped_file)->ncmds);
 	lc = (struct load_command *)((char *)s->maped_file + sizeof(struct mach_header_64));
 	while (ncmds--)
 	{

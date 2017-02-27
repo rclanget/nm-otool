@@ -5,7 +5,6 @@
 # define MACH		2
 # define UNIVERSAL	3
 
-#include <stdio.h>
 #include <string.h>
 
 static void	ft_print_output_section_32(t_struct *s, t_segment *segment, char *sectname)
@@ -15,8 +14,9 @@ static void	ft_print_output_section_32(t_struct *s, t_segment *segment, char *se
 	void				*end;
 	int					nsects;
 	struct section		*section;
-	int					i = 0;
+	int					i;
 
+	i = 0;
 	nsects = ft_swap_32(s, SEGMENT_32(segment->segment)->nsects);
 	section = segment->section;
 	while (nsects--)
