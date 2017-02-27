@@ -2,7 +2,7 @@
 
 #include "libft.h"
 
-int			ft_add_nlist_64(t_nm *s, struct nlist_64 *nlist, uint32_t nsyms)
+static int	ft_add_nlist_64(t_nm *s, struct nlist_64 *nlist, uint32_t nsyms)
 {
 	t_nlist	*new;
 	t_nlist	*tmp;
@@ -27,7 +27,7 @@ int			ft_add_nlist_64(t_nm *s, struct nlist_64 *nlist, uint32_t nsyms)
 	return (EXIT_SUCCESS);
 }
 
-int			ft_add_nlist_32(t_nm *s, struct nlist *nlist, uint32_t nsyms)
+static int	ft_add_nlist_32(t_nm *s, struct nlist *nlist, uint32_t nsyms)
 {
 	t_nlist	*new;
 	t_nlist	*tmp;
@@ -54,8 +54,8 @@ int			ft_add_nlist_32(t_nm *s, struct nlist *nlist, uint32_t nsyms)
 
 int			ft_get_symcmd_info(t_nm *s)
 {
-	uint32_t				nsyms;
-	void					*nlists;
+	uint32_t	nsyms;
+	void		*nlists;
 	
 	nsyms = ft_swap_32(s, ((struct symtab_command *)s->macho_symcmd)->nsyms);
 	nlists = s->file_addr + ft_swap_32(s, ((struct symtab_command *)s->macho_symcmd)->symoff);
@@ -78,8 +78,8 @@ int			ft_get_symcmd_info(t_nm *s)
 
 int			ft_get_macho(t_nm *s, uint32_t magic)
 {
-	uint32_t				ncmds;
-	struct load_command		*lc;
+	uint32_t			ncmds;
+	struct load_command	*lc;
 
 	s->file_subtype = magic == MH_MAGIC ? 32 : 64;
 	s->macho_header = (struct mach_header *)s->file_addr;
