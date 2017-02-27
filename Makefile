@@ -85,4 +85,4 @@ norme:
 	@norminette $(OTOOL_SRC)
 	@norminette $(INC_PATH)
 
-.PHONY: all, clean, fclean, re, norme
+.PHONY: all, clean, fclean, re, norme, otool, nm
