@@ -56,22 +56,24 @@ int			ft_get_symcmd_info(t_nm *s)
 {
 	uint32_t	nsyms;
 	void		*nlists;
-	
+	uint32_t	i;
+
 	nsyms = ft_swap_32(s, ((struct symtab_command *)s->macho_symcmd)->nsyms);
 	nlists = s->file_addr + ft_swap_32(s, ((struct symtab_command *)s->macho_symcmd)->symoff);
-	while (nsyms)
+	i = 0;
+	while (i < nsyms)
 	{
 		if (s->file_subtype == 32)
 		{
-			if (ft_add_nlist_32(s, nlists, nsyms) ==  EXIT_FAILURE)
+			if (ft_add_nlist_32(s, nlists, i) ==  EXIT_FAILURE)
 				return (EXIT_FAILURE);
 		}
 		else
 		{
-			if (ft_add_nlist_64(s, nlists, nsyms) == EXIT_FAILURE)
+			if (ft_add_nlist_64(s, nlists, i) == EXIT_FAILURE)
 				return (EXIT_FAILURE);
 		}
-		nsyms--;
+		i++;
 	}
 	return (EXIT_SUCCESS);
 }
@@ -81,7 +83,7 @@ int			ft_get_macho(t_nm *s, uint32_t magic)
 	uint32_t			ncmds;
 	struct load_command	*lc;
 
-	s->file_subtype = magic == MH_MAGIC ? 32 : 64;
+	s->file_subtype = (magic == MH_MAGIC ? 32 : 64);
 	s->macho_header = (struct mach_header *)s->file_addr;
 	ncmds = ft_swap_32(s, s->macho_header->ncmds);
 	if (s->file_subtype == 32)
@@ -100,5 +102,6 @@ int			ft_get_macho(t_nm *s, uint32_t magic)
 		}
 		lc = (struct load_command *)((char *)lc + lc->cmdsize);
 	}
+	ft_print_output(s);
 	return (EXIT_SUCCESS);
 }
