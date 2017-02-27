@@ -60,4 +60,9 @@ uint32_t				ft_swap_32(t_nm *s, uint32_t val);
 */
 int						ft_nm(t_nm *s);
 
+/*
+*	ft_macho.c
+*/
+int						ft_get_macho(t_nm *s, uint32_t magic);
+
 #endif

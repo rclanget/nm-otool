@@ -25,7 +25,8 @@ OTOOL_OBJ			=	$(addprefix $(OTOOL_OBJ_PATH),$(OTOOL_OBJ_NAME))
 NM_SRC_PATH	=	./srcs/nm/
 NM_SRC_NAME	=	main.c \
 				ft_nm.c \
-				ft_swap.c
+				ft_swap.c \
+				ft_macho.c
 NM_SRC			=	$(addprefix $(NM_SRC_PATH),$(NM_SRC_NAME))
 
 NM_OBJ_PATH	=	./obj/nm/
