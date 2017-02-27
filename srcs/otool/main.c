@@ -39,7 +39,7 @@ int			main(int ac, char **av)
 	int			nb_opt;
 
 	ft_bzero(&s, sizeof(t_struct));
-	if ((nb_opt = ft_option(av, &s.options)) == -1)
+	if ((nb_opt = ft_option(av, &s.options, OPTIONS, USAGE)) == -1)
 		return (1);
 	av = (av + (nb_opt + 1));	
 	if ((ac -= nb_opt) == 1 && ++ac)
@@ -50,7 +50,10 @@ int			main(int ac, char **av)
 		if (ft_map_file(&s, *av) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		if (ft_otool(&s) == EXIT_FAILURE)
+		{
+			ft_munmmap_file(&s);
 			return (EXIT_FAILURE);
+		}
 		if (ft_munmmap_file(&s) == EXIT_FAILURE)
 			return (EXIT_FAILURE);
 		++av;

@@ -8,8 +8,12 @@
 #include <mach-o/fat.h>
 #include <mach/machine.h>
 
-# define OPT_D			1
-# define OPT_T			2
+# define OPTIONS	"dt"
+# define OPT_D		1
+# define OPT_T		2
+# define USAGE		"Usage: ft_otool [OPTIONS] [FILES]\n\n" \
+					"  -d	Display the contents of the (__DATA,__data) section.\n" \
+					"  -t	display text section (by default)\n"
 
 # define MMAP_FLAG		PROT_READ, MAP_PRIVATE
 
