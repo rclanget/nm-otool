@@ -24,7 +24,7 @@ int         ft_nm(t_nm *s)
 	if (magic == MH_MAGIC || magic == MH_MAGIC_64)
 		return (ft_get_macho(s, magic));
 	else if (magic == FAT_MAGIC || magic == FAT_MAGIC_64)
-		ft_printf("FAT\n");
+		return (ft_get_fat(s, magic));
 	else if (!ft_strncmp(s->file_addr, ARMAG, SARMAG))
 		ft_printf("ARCHIVE\n");
 	ft_printf("Unknow format\n");

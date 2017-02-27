@@ -65,4 +65,9 @@ int						ft_nm(t_nm *s);
 */
 int						ft_get_macho(t_nm *s, uint32_t magic);
 
+/*
+*	ft_fat.c
+*/
+int						ft_get_fat(t_nm *s, uint32_t magic);
+
 #endif
