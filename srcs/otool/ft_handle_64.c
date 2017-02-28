@@ -66,11 +66,11 @@ int			ft_handle_64(t_struct *s)
 	struct load_command	*lc;
 	unsigned int		ncmds;
 
-	ncmds = ft_swap_64(s, HEADER_32(s->maped_file)->ncmds);
+	ncmds = ft_swap_32(s, HEADER_64(s->maped_file)->ncmds);
 	lc = (struct load_command *)((char *)s->maped_file + sizeof(struct mach_header_64));
 	while (ncmds--)
 	{
-		if (ft_swap_64(s, lc->cmd) == LC_SEGMENT_64)
+		if (ft_swap_32(s, lc->cmd) == LC_SEGMENT_64)
 		{
 			struct segment_command_64 *seg64;
 			seg64 = (struct segment_command_64 *)lc;
@@ -78,7 +78,7 @@ int			ft_handle_64(t_struct *s)
 			sect64 = (struct section_64 *)((char *)seg64 + sizeof(struct segment_command_64));
 			ft_add_segment(s, seg64, sect64);
 		}
-		lc = (struct load_command *)((char *)lc + ft_swap_64(s, lc->cmdsize));
+		lc = (struct load_command *)((char *)lc + ft_swap_32(s, lc->cmdsize));
 	}
 	ft_print_output_64(s);
 	return (0);
