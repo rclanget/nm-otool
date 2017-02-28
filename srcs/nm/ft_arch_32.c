@@ -62,7 +62,6 @@ static struct ranlib	*get_ranlib_structures(t_nm *s)
 	rlib = (struct ranlib *)((char *)ar + sizeof(struct ar_hdr) + 20 + sizeof(uint32_t));
 	nranlib = get_ranlib_number(s);
 	rlib_sort = sort_ranlib(rlib, nranlib);
-return (rlib);
 	return (rlib_sort);
 }
 
@@ -79,14 +78,14 @@ int						ft_get_arch_32(t_nm *s)
 	rlib = get_ranlib_structures(s);
 	save_maped_file = s->file_addr;
 	nranlib = get_ranlib_number(s);
-	ft_print("Archive : %s\n", s->archive_name);
 	while (i < nranlib)
 	{
 		function_name = (char *)s->file_addr + rlib[i].ran_off + sizeof(struct ar_hdr);
 		tmp = (void *)(function_name + ft_atoi(((struct ar_hdr *)((char *)s->file_addr + rlib[i].ran_off))->ar_name + 3));
 		s->file_name = function_name;
 		s->file_addr = tmp;
-		ft_nm(s);
+		if (!i || (i && rlib[i].ran_off != rlib[i + 1].ran_off))
+			ft_nm(s);
 		s->swap = 0;
 		s->file_addr = save_maped_file;
 		++i;
